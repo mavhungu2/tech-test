@@ -30,6 +30,7 @@
       </b-form-group>
 
       <b-button type="submit" variant="primary">Submit</b-button>
+      <h2 >{{conversed_value}}</h2>
     </b-form>
   </div>
 </template>
@@ -38,15 +39,12 @@
   import axios from 'axios'
   
   var currencies = []
+  var conversed_value = ''
 
   axios.get("https://api.exchangeratesapi.io/latest").then(Response => {
-    console.log(Response['data']['rates'])
-    console.log(currencies)
     for(var item in Response['data']['rates']){
-      console.log(item)
       currencies.push(item)
     }
-    console.log(currencies)
   })
 
   export default {
@@ -57,13 +55,17 @@
           currency: null,
         },
         currencies: currencies,
-        show: true
+        show: true,
+        conversed_value: conversed_value
       }
     },
     methods: {
       onSubmit(evt) {
         evt.preventDefault()
-        alert(JSON.stringify(this.form))
+        var conversion = "ZAR_"+this.form['currency']
+        axios.get("https://free.currconv.com/api/v7/convert?q="+conversion+"&compact=ultra&apiKey=b8722ac32c4333c77884").then(Response=>{
+          this.conversed_value =  this.form['amount']+ " "+ this.form['currency'] + " = " + (Response['data'][conversion]*this.form['amount']) +" ZAR"
+        })
       },
     }
   }
