@@ -34,7 +34,7 @@
 <script>
   import store from '../store'
 
-  store.dispatch('get_currencies')
+  store.dispatch('taksModule/get_currencies')
 
   export default {
     data() {
@@ -43,7 +43,7 @@
           amount: '',
           currency: null,
         },
-        currencies: this.$store.state.currencies,
+        currencies: this.$store.state.taksModule.currencies,
         show: true,
       }
     },
@@ -51,12 +51,12 @@
       onSubmit(evt) {
         evt.preventDefault()
         var conversion = "ZAR_"+this.form['currency']
-        store.dispatch("convert_value", {"amount": this.form['amount'], "currency": this.form['currency'],"conversion": conversion})
+        store.dispatch("taksModule/convert_value", {"amount": this.form['amount'], "currency": this.form['currency'],"conversion": conversion})
       },
     },
     computed: {
       conversed_value () {
-        return this.$store.state.conversed_value
+        return this.$store.state.taksModule.conversed_value
       }
     }
   }

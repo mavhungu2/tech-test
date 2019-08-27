@@ -4,7 +4,8 @@ import axios from 'axios'
 
 Vue.use(Vuex);
 
-export default new Vuex.Store({
+const taksModule = {
+  namespaced: true,
   state: {
     currencies: [],
     conversed_value: ""
@@ -31,5 +32,11 @@ export default new Vuex.Store({
       context.commit('convert_value', payload)
     }
 
+  }
+}
+
+export default new Vuex.Store({
+  modules: {
+    taksModule: taksModule
   }
 });
