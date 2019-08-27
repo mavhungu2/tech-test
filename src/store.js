@@ -22,5 +22,14 @@ export default new Vuex.Store({
           state.conversed_value =  payload['amount']+ " "+ payload['currency'] + " = " + (Response['data'][payload['conversion']]*payload['amount']) +" ZAR"
       })
     }
+  },
+  actions:{
+    get_currencies (context){
+      context.commit('get_currencies')
+    },
+    convert_value(context, payload){
+      context.commit('convert_value', payload)
+    }
+
   }
 });

@@ -34,7 +34,7 @@
 <script>
   import store from '../store'
 
-  store.commit('get_currencies')
+  store.dispatch('get_currencies')
 
   export default {
     data() {
@@ -51,7 +51,7 @@
       onSubmit(evt) {
         evt.preventDefault()
         var conversion = "ZAR_"+this.form['currency']
-        store.commit("convert_value", {"amount": this.form['amount'], "currency": this.form['currency'],"conversion": conversion})
+        store.dispatch("convert_value", {"amount": this.form['amount'], "currency": this.form['currency'],"conversion": conversion})
       },
     },
     computed: {
