@@ -20,7 +20,7 @@ const taksModule = {
     },
     convert_value(state, payload){
       axios.get("https://free.currconv.com/api/v7/convert?q="+payload['conversion']+"&compact=ultra&apiKey=b8722ac32c4333c77884").then(Response=>{
-          state.conversed_value =  payload['amount']+ " "+ payload['currency'] + " = " + (Response['data'][payload['conversion']]*payload['amount']) +" ZAR"
+          state.conversed_value =  payload['amount']+ " "+ payload['currency'] + " = " + (payload['amount']/Response['data'][payload['conversion']]) +" ZAR"
       })
     }
   },
