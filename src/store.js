@@ -4,6 +4,9 @@ import axios from 'axios'
 
 Vue.use(Vuex);
 
+// Update currency values in the api
+axios.put("http://localhost:8000/currencies/")
+
 const taksModule = {
   namespaced: true,
   state: {
@@ -12,15 +15,16 @@ const taksModule = {
   },
   mutations: {
     get_currencies (state) {
-      axios.get("https://api.exchangeratesapi.io/latest").then(Response => {
-        for(var item in Response['data']['rates']){
-          state.currencies.push(item)
+      axios.get("http://localhost:8000/currencies/").then(Response => {
+        for(var item in Response['data']['currencies']){
+          var currency_name = Response['data']['currencies'][item]['name']
+          state.currencies.push(currency_name)
         }
       })
     },
     convert_value(state, payload){
-      axios.get("https://free.currconv.com/api/v7/convert?q="+payload['conversion']+"&compact=ultra&apiKey=b8722ac32c4333c77884").then(Response=>{
-          state.conversed_value =  payload['amount']+ " "+ payload['currency'] + " = " + (payload['amount']/Response['data'][payload['conversion']]) +" ZAR"
+      axios.post("http://192.168.0.97:8000/currencies/?currency="+payload['currency']+"&value="+payload['amount']).then(Response=>{ 
+        state.conversed_value = payload['amount']+" "+payload['currency']+" = " +Response['data']['result'].toFixed(2) +" ZAR"
       })
     }
   },
