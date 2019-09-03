@@ -22,10 +22,6 @@
           <template slot="first">
             <option :value="null" disabled>-- Please select a currency --</option>
           </template>
-          <!-- <option v-for="item in currencies" 
-            v-bind:key="item" 
-            :value="item">{{item}}
-          </option> -->
         </b-form-select>
       </b-form-group>
 
@@ -36,16 +32,9 @@
 </template>
 
 <script>
-  import axios from 'axios'
-  
-  var currencies = []
-  var conversed_value = ''
+  import store from '../store'
 
-  axios.get("https://api.exchangeratesapi.io/latest").then(Response => {
-    for(var item in Response['data']['rates']){
-      currencies.push(item)
-    }
-  })
+  store.dispatch('taksModule/get_currencies')
 
   export default {
     data() {
@@ -54,19 +43,21 @@
           amount: '',
           currency: null,
         },
-        currencies: currencies,
+        currencies: this.$store.state.taksModule.currencies,
         show: true,
-        conversed_value: conversed_value
       }
     },
     methods: {
       onSubmit(evt) {
         evt.preventDefault()
         var conversion = "ZAR_"+this.form['currency']
-        axios.get("https://free.currconv.com/api/v7/convert?q="+conversion+"&compact=ultra&apiKey=b8722ac32c4333c77884").then(Response=>{
-          this.conversed_value =  this.form['amount']+ " "+ this.form['currency'] + " = " + (Response['data'][conversion]*this.form['amount']) +" ZAR"
-        })
+        store.dispatch("taksModule/convert_value", {"amount": this.form['amount'], "currency": this.form['currency'],"conversion": conversion})
       },
+    },
+    computed: {
+      conversed_value () {
+        return this.$store.state.taksModule.conversed_value
+      }
     }
   }
 </script>
